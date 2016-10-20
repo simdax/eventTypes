@@ -1,7 +1,24 @@
 
-Mel{
+TYPES{
 	*initClass{
 		(
+			Event.addEventType(\appo,{ arg self;
+				var dur, mtranspose;
+				~degree=(~degree+~mtranspose).degreeToKey(~scale?[0,2,4],7);
+				~scale=~mode ? #[0,2,4,5,7,9,11];
+				~appo !? {
+					if(~appo==0){dur=0}
+					{
+						mtranspose=Pseq(({[-1,1].choose}!~appo?1));
+						dur=(~dur!(~appo)).normalizeSum * ~dur;
+					}
+				} ??
+				{	dur=~dur.value			};
+				~type=\note;
+				Pbind(\dur, dur.pseq, \mtranspose, mtranspose?0)
+				.play(protoEvent:currentEnvironment);
+				//	~type=\note; currentEnvironment.play
+			});
 			Event.addEventType(\mel, {
 				~degree.postln;
 				if(~degree.isArray){
